@@ -56,6 +56,7 @@ secondDifferences = calcs.sDifferences(differences)
 xorBin, xorDec = calcs.xor(binKeys)
 diffs, diffInstances = calcs.mostCommon(differences)
 xors, xorInstances = calcs.mostCommon(xorDec)
+nots = calcs.bitNot(binKeys)
 
 # write in the column titles for calculations
 row = 0
@@ -71,6 +72,7 @@ calculations.write(row, 10, 'XOR_BIN', font)
 calculations.write(row, 11, 'XOR_DEC', font)
 calculations.write(row, 13, 'APPEARANCES (DIFFERENCES)', font)
 calculations.write(row, 16, 'APPEARANCES (XOR)', font)
+calculations.write(row, 18, 'BIT_NOT', font)
 row += 1
 
 # write in the columns for calculations
@@ -81,6 +83,7 @@ for i in range(len(seeds)):
     calculations.write(row, 3, decKeys[i], font)
     calculations.write(row, 4, binSeeds[i], font)
     calculations.write_rich_string(row, 5, *binaries[i])
+    calculations.write(row, 18, nots[i], font)
 
     if i < len(seeds) - 1:
         calculations.write(row, 7, differences[i], font)

@@ -48,3 +48,15 @@ def binDiff(data, font, font2):
         result.append(formattedNums)
     result.append([font2, data[-1]])
     return result
+
+def bitNot(binKeys):
+    nots = []
+    for i in binKeys:
+        string = ""
+        for letter in range(len(i)):
+            if i[letter] == '1':
+                string += '0'
+            else:
+                string += '1'
+        nots.append(string)
+    return nots
