@@ -3,9 +3,9 @@ This tool is used to analyze seed/key data in the form of an excel document.</br
 
 ## Prerequisites: </br><ul>
 <li>python3.5</br>
-<li>pandas <pre><code>sudo pip install pandas
+<li>pandas <pre><code>pip install pandas
 </code></pre>
-<li>xlsxwriter <pre><code>sudo pip install xlrd
+<li>xlsxwriter <pre><code>pip install xlrd
 </code></pre></ul></br>
 
 ## Features:</br>
