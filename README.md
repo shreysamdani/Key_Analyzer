@@ -5,7 +5,7 @@ This tool is used to analyze seed/key data in the form of an excel document.</br
 <li>python3.5</br>
 <li>pandas <pre><code>sudo pip install pandas
 </code></pre>
-<li>xlsxwriter <pre><code>sudo pip install XlsxWriter
+<li>xlsxwriter <pre><code>sudo pip install xlrd
 </code></pre></ul></br>
 
 ## Features:</br>
