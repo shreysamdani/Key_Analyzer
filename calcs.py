@@ -30,7 +30,7 @@ def mostCommon(data):
         if i in tracker:
             tracker[i] += 1
         else:
-            tracker[i] = 0
+            tracker[i] = 1
     appearances = sorted(tracker.items(), key = lambda x : x[1])[::-1]
     values = [i[0] for i in appearances]
     nums = [i[1] for i in appearances]

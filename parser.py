@@ -4,6 +4,7 @@ import sys
 import os
 import calcs
 import rotatesShifts
+import platform
 
 # read in the file
 xl = pd.read_excel(str(sys.argv[1]), 'Seed_Keys_Samples', encoding='utf-8')
@@ -174,4 +175,8 @@ graphs.insert_chart(17, 1, sdiffGraph)
 graphs.insert_chart(17, 9, xorGraph)
 # close the workbook and open the file
 workbook.close()
-os.system("open " + file.replace(" ", "\ "))
+
+if platform.system() == 'Windows':
+    os.startfile(file.replace(" ", "\ "))
+else:
+    os.system("open " + file.replace(" ", "\ "))
