@@ -42,4 +42,4 @@ def performRShift(binKeys, k):
     return rightShiftedKeys
 
 def createMasks(binKeys):
-    return [[int(binaryKey, 2) & 2 ** i for binaryKey in binKeys] for i in range(0, 16)]
+    return [[int(binaryKey, 2) & int(str(2 ** i), 16) for binaryKey in binKeys] for i in range(0, 16)]

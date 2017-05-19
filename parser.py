@@ -12,11 +12,11 @@ seeds = xl['2 bytes'][1:]
 keys = xl['Unnamed: 1'][1:]
 
 # convert data to specific type
-hexSeeds = [i for i in seeds]
-hexKeys = [i for i in keys]
+hexSeeds = [str(i) for i in seeds]
+hexKeys = [str(i) for i in keys]
 
-decSeeds = [int(i, 16) for i in seeds]
-decKeys = [int(i, 16) for i in keys]
+decSeeds = [int(str(i), 16) for i in seeds]
+decKeys = [int(str(i), 16) for i in keys]
 
 binSeeds = [str(bin(i))[2:] for i in decSeeds]
 binKeys = [str(bin(i))[2:] for i in decKeys]
