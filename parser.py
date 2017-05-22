@@ -29,7 +29,8 @@ for i in range(len(binSeeds)):
 
 
 # create a new excel file
-file = str(sys.argv[1])[:-5] + ' Analysis.xls'
+name_in = str(sys.argv[1])
+file = name_in[:name_in.find(".")] + ' Analysis.xls'
 workbook = xlsxwriter.Workbook(file)
 
 calculations = workbook.add_worksheet('Basic Calculations')
@@ -57,7 +58,7 @@ secondDifferences = calcs.sDifferences(differences)
 xorBin, xorDec = calcs.xor(binKeys)
 diffs, diffInstances = calcs.mostCommon(differences)
 xors, xorInstances = calcs.mostCommon(xorDec)
-nots = calcs.bitNot(binKeys)
+nots = calcs.bitNot(binKeys, rFont, font)
 
 # write in the column titles for calculations
 row = 0
@@ -84,7 +85,7 @@ for i in range(len(seeds)):
     calculations.write(row, 3, decKeys[i], font)
     calculations.write(row, 4, binSeeds[i], font)
     calculations.write_rich_string(row, 5, *binaries[i])
-    calculations.write(row, 18, nots[i], font)
+    calculations.write_rich_string(row, 18, *nots[i])
 
     if i < len(seeds) - 1:
         calculations.write(row, 7, differences[i], font)
@@ -133,15 +134,22 @@ for i in range(length - 1):
     shifts.write(row, i + length, 'LEFT ' + str(i + 1), bFont)
 for i in range(length - 1):
     shifts.write(row, i + 2 * length, 'ROTATE ' + str(i + 1), bFont)
-for i in range(length - 1):
-    shifts.write(row, i + 3 * length, 'MASK ' + str(i + 1), bFont)
+for i in range(length//4):
+    shifts.write(row, i + 3 * length, 'MASK 2^' + str(i), bFont)
 row += 1
+temp = row
 
 for i in range(length - 1):
     for j in range(len(binKeys)):
         shifts.write(row, i, rshifts[i][j] , font)
         shifts.write(row, i + length, lshifts[i][j], font)
         shifts.write(row, i + 2 * length, rotates[i][j], font)
+        row += 1
+    row = 2
+
+row = temp
+for i in range(length//4):
+    for j in range(len(binKeys)):
         shifts.write(row, i + 3 * length, masks[i][j], font)
         row += 1
     row = 2

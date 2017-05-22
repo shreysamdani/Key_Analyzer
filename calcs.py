@@ -49,14 +49,22 @@ def binDiff(data, font, font2):
     result.append([font2, data[-1]])
     return result
 
-def bitNot(binKeys):
+def bitNot(data, font, font2):
     nots = []
-    for i in binKeys:
+    for i in range(len(data) - 1):
+        formattedNums = []
         string = ""
-        for letter in range(len(i)):
-            if i[letter] == '1':
-                string += '0'
+        for j in range(len(data[i])):
+            if data[i][j] == '1':
+                if int(data[i][j], 2) ^ int(data[i + 1][j], 2):
+                    formattedNums.extend([font, '0'])
+                else:
+                    formattedNums.extend([font2, '0'])
             else:
-                string += '1'
-        nots.append(string)
+                if int(data[i][j], 2) ^ int(data[i + 1][j], 2):
+                    formattedNums.extend([font, '1'])
+                else:
+                    formattedNums.extend([font2, '1'])
+        nots.append(formattedNums)
+    nots.append([font2, data[-1]])
     return nots
