@@ -8,8 +8,9 @@ import platform
 
 # read in the file
 xl = pd.read_excel(str(sys.argv[1]), 'Seed_Keys_Samples', encoding='utf-8')
-seeds = xl['2 bytes'][1:]
-keys = xl['Unnamed: 1'][1:]
+column = list(xl)
+keys = xl[column[1]][1:]
+seeds = xl[column[0]][1:]
 
 # convert data to specific type
 hexSeeds = [str(i) for i in seeds]
@@ -27,7 +28,7 @@ for i in range(len(binSeeds)):
     binKeys[i] = '0' * (4 * len(hexKeys[1]) - len(binKeys[i])) + binKeys[i]
 
 
-# create a new excel file 
+# create a new excel file
 file = str(sys.argv[1])[:-5] + ' Analysis.xls'
 workbook = xlsxwriter.Workbook(file)
 
