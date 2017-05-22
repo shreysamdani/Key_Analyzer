@@ -182,4 +182,4 @@ workbook.close()
 if platform.system() == 'Windows':
     os.startfile(os.path.abspath(file))
 else:
-    os.system("open " + file.replace(" ", "\\ "))
+    os.system("open " + "'" + os.path.abspath(file) + "'")
