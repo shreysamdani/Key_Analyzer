@@ -29,8 +29,12 @@ for i in range(len(binSeeds)):
 
 
 # create a new excel file
+<<<<<<< HEAD
 name_in = str(sys.argv[1])
 file = name_in[:name_in.find(".")] + ' Analysis.xls'
+=======
+file = (str(sys.argv[1])[:-5] + ' Analysis.xlsx')
+>>>>>>> 2bf9c9192f0db20814d509cf1e20f4dcb4268748
 workbook = xlsxwriter.Workbook(file)
 
 calculations = workbook.add_worksheet('Basic Calculations')
@@ -187,8 +191,7 @@ graphs.insert_chart(17, 1, sdiffGraph)
 graphs.insert_chart(17, 9, xorGraph)
 # close the workbook and open the file
 workbook.close()
-
 if platform.system() == 'Windows':
     os.startfile(os.path.abspath(file))
 else:
-    os.system("open " + file.replace(" ", "\ "))
+    os.system("open " + file.replace(" ", "\\ "))
