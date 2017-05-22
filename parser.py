@@ -5,9 +5,17 @@ import os
 import calcs
 import rotatesShifts
 import platform
+# import input_file
+
+
 
 # read in the file
 xl = pd.read_excel(str(sys.argv[1]), 'Seed_Keys_Samples', encoding='utf-8')
+name_in = str(sys.argv[1])
+
+# name_in = str(input_file.getFile())
+# xl = pd.read_excel(name_in, 'Seed_Keys_Samples', encoding='utf-8')
+
 column = list(xl)
 keys = xl[column[1]][1:]
 seeds = xl[column[0]][1:]
@@ -29,12 +37,7 @@ for i in range(len(binSeeds)):
 
 
 # create a new excel file
-<<<<<<< HEAD
-name_in = str(sys.argv[1])
-file = name_in[:name_in.find(".")] + ' Analysis.xls'
-=======
-file = (str(sys.argv[1])[:-5] + ' Analysis.xlsx')
->>>>>>> 2bf9c9192f0db20814d509cf1e20f4dcb4268748
+file = name_in[:name_in.find(".xls")] + ' Analysis.xls'
 workbook = xlsxwriter.Workbook(file)
 
 calculations = workbook.add_worksheet('Basic Calculations')
