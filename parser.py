@@ -181,6 +181,6 @@ graphs.insert_chart(17, 9, xorGraph)
 workbook.close()
 
 if platform.system() == 'Windows':
-    os.startfile(file.replace(" ", "\ "))
+    os.startfile(os.path.abspath(file))
 else:
     os.system("open " + file.replace(" ", "\ "))
