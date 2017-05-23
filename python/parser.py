@@ -5,20 +5,18 @@ import os
 import calcs
 import rotatesShifts
 import platform
-# import input_file
 
-
-
-# read in the file
-xl = pd.read_excel(str(sys.argv[1]), 'Seed_Keys_Samples', encoding='utf-8')
-name_in = str(sys.argv[1])
-
-# name_in = str(input_file.getFile())
-# xl = pd.read_excel(name_in, 'Seed_Keys_Samples', encoding='utf-8')
+filename = str(input("Drag and drop your file here: \t"))
+if os.name == 'nt':
+    filename = os.path.abspath(filename[3:]).replace("'", "")
+xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
+name_in = filename
 
 column = list(xl)
 keys = xl[column[1]][1:]
+keys.dropna()
 seeds = xl[column[0]][1:]
+seeds.dropna()
 
 # convert data to specific type
 hexSeeds = [str(i) for i in seeds]
@@ -197,4 +195,4 @@ workbook.close()
 if platform.system() == 'Windows':
     os.startfile(os.path.abspath(file))
 else:
-    os.system("open " + "'" + os.path.abspath(file) + "'")
+    os.system("open " + file.replace(" ", "\\ "))

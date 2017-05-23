@@ -120,12 +120,12 @@ def bitNot(data, font, font2):
     nots.append([font2, data[-1]])
     return nots
 
-# read in the file
-filename = str(input("Drag and drop your file here:")).replace("\ ", " ").strip()
-if platform.system() == 'Windows':
-	filename = filename.replace("\"", "")
-print(filename)
+filename = str(input("Drag and drop your file here: \t")).replace("\ ", " ").strip()
+if os.name == 'nt':
+    filename = os.path.abspath(filename[3:]).replace("'", "")
 xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
+name_in = filename
+
 column = list(xl)
 keys = xl[column[1]][1:]
 keys.dropna()
@@ -149,7 +149,7 @@ for i in range(len(binSeeds)):
 
 
 # create a new excel file
-file = filename[:-5] + ' Analysis.xlsx'
+file = name_in[:name_in.find(".xls")] + ' Analysis.xls'
 workbook = xlsxwriter.Workbook(file)
 
 calculations = workbook.add_worksheet('Basic Calculations')
@@ -177,7 +177,7 @@ secondDifferences = sDifferences(differences)
 xorBin, xorDec = xor(binKeys)
 diffs, diffInstances = mostCommon(differences)
 xors, xorInstances = mostCommon(xorDec)
-nots = bitNot(binKeys, font, rFont)
+nots = bitNot(binKeys, rFont, font)
 
 # write in the column titles for calculations
 row = 0
@@ -253,7 +253,7 @@ for i in range(length - 1):
     shifts.write(row, i + length, 'LEFT ' + str(i + 1), bFont)
 for i in range(length - 1):
     shifts.write(row, i + 2 * length, 'ROTATE ' + str(i + 1), bFont)
-for i in range(length//4):
+for i in range(length // 4):
     shifts.write(row, i + 3 * length, 'MASK 2^' + str(i), bFont)
 row += 1
 temp = row
@@ -267,7 +267,7 @@ for i in range(length - 1):
     row = 2
 
 row = temp
-for i in range(length//4):
+for i in range(length // 4):
     for j in range(len(binKeys)):
         shifts.write(row, i + 3 * length, masks[i][j], font)
         row += 1
@@ -309,4 +309,4 @@ workbook.close()
 if platform.system() == 'Windows':
     os.startfile(os.path.abspath(file))
 else:
-    os.system("open " + "'" + os.path.abspath(file) + "'")
+    os.system("open " + file.replace(" ", "\\ "))
