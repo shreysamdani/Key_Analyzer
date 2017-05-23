@@ -122,7 +122,7 @@ def bitNot(data, font, font2):
 
 filename = str(input("Drag and drop your file here: \t")).replace("\ ", " ").strip()
 if os.name == 'nt':
-    filename = os.path.abspath(filename[3:]).replace("'", "")
+    filename = os.path.abspath(filename[3:]).replace("\"", "")
 xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
 name_in = filename
 
