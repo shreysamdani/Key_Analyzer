@@ -35,7 +35,7 @@ Open terminal and run the following to install:</br>
 <pre><code>sudo pip install pandas
 </code></pre>
 <pre><code>sudo pip install xlrd
-</code></pre></ul></br>
+</code></pre></ul>
 <pre><code>sudo pip install numpy
 </code></pre></ul></br>
 
@@ -44,7 +44,7 @@ Run cmd as administrator and execute the following:</br>
 <pre><code>pip install pandas
 </code></pre>
 <pre><code>pip install xlrd
-</code></pre></ul></br>
+</code></pre></ul>
 <pre><code>pip install numpy
 </code></pre></ul></br>
 
