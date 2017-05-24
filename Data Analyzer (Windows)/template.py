@@ -7,7 +7,7 @@ from colorama import init, Fore, Back, Style
 ############# RUN THIS FILE IN TERMINAL ##########################
 
 
-xl = pd.read_excel(os.path.basename(__file__)[:len(' Functions.py')] + 'Analysis.xlsx', 'Basic Calculations', encoding='utf-8')
+xl = pd.read_excel(os.path.basename(__file__)[:-len('Functions.py')] + 'Analysis.xlsx', 'Basic Calculations', encoding='utf-8')
 column = list(xl)
 
 hex_seeds = list(xl[column[0]][:])

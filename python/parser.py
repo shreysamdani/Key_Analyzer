@@ -246,6 +246,41 @@ graphs.insert_chart(1, 9, diffGraph)
 graphs.insert_chart(17, 1, sdiffGraph)
 graphs.insert_chart(17, 9, xorGraph)
 
+
+def find_consecutive_range():
+    f = 0
+    while decSeeds[f] + 1 != decSeeds[f + 1]:
+        f += 1
+    l = f
+    while decSeeds[l] + 1 == decSeeds[l + 1]:
+        l += 1
+    return f, l
+
+def find_bitwalk():
+    f = 0
+    while decSeeds[f] * 2 != decSeeds[f + 1]:
+        f += 1
+    l = f 
+    while decSeeds[l] * 2 == decSeeds[l + 1]:
+        l += 1
+    return f, l
+
+consecutiveGraph = workbook.add_chart({'type' : 'scatter', 'subtype' : 'straight_with_markers'})
+consecutiveGraph.set_title({'name' : 'Key vs Seed (Consecutive Seeds)'})
+first, last = find_consecutive_range()
+if last - first > 0:
+    consecutiveGraph.add_series({'values' : '=Basic Calculations!$D$' + str(first) + ':$D$' + str(last),
+                      'categories': '=Basic Calculations!$C$' + str(first) + ':$C$' + str(last)})
+graphs.insert_chart(33, 1, consecutiveGraph)
+
+bitwalkGraph = workbook.add_chart({'type' : 'scatter', 'subtype' : 'straight_with_markers'})
+bitwalkGraph.set_title({'name' : 'Key vs Seed (Power-2 Seeds)'})
+first, last = find_bitwalk()
+if last - first > 0:
+    bitwalkGraph.add_series({'values' : '=Basic Calculations!$D$' + str(first) + ':$D$' + str(last),
+                      'categories': '=Basic Calculations!$C$' + str(first) + ':$C$' + str(last)})
+graphs.insert_chart(33, 9, bitwalkGraph)
+
 try:
     # close the workbook
     workbook.close()
