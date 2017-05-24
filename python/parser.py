@@ -5,12 +5,17 @@ import os
 import calcs
 import rotatesShifts
 import platform
+import shutil 
+import subprocess
+################################ READ FORMATTED INPUT FILE ##########################
 
 filename = str(input("Drag and drop your file here: \t"))
 if os.name == 'nt':
     filename = os.path.abspath(filename[3:]).replace("'", "")
 xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
 name_in = filename
+
+############################### CONVERT INPUT INTO COLUMNS ##########################
 
 column = list(xl)
 keys = xl[column[1]][1:]
@@ -33,10 +38,52 @@ for i in range(len(binSeeds)):
     binSeeds[i] = '0' * (4 * len(hexKeys[1]) - len(binSeeds[i])) + binSeeds[i]
     binKeys[i] = '0' * (4 * len(hexKeys[1]) - len(binKeys[i])) + binKeys[i]
 
+################################ BUILDING NEW EXCEL FILE ##########################
 
 # create a new excel file
-file = name_in[:name_in.find(".xls")] + ' Analysis.xls'
-workbook = xlsxwriter.Workbook(file)
+file = name_in[:name_in.find(".xls")]
+workbookName = file + ' Analysis.xlsx'
+workbook = xlsxwriter.Workbook(workbookName)
+
+################################ BUILDING NEW PYTHON FILE ##########################
+
+pythonFileName = file + ' Functions.py'
+
+# decide where to keep new directory
+print('This program saves program files in a directory. Please paste your current directory. Type \"def\" for a default directory on your desktop.\n')
+location = str(input())
+
+# go to user's home path
+userhome = os.path.expanduser('~')
+useros = platform.system()
+if location == 'def':
+    if useros == 'Windows':
+        location = userhome + '\\Desktop'
+    else:
+        location = userhome + '/Desktop'
+
+# build a folder structure: location --> Data Analyzer --> file folder --> files
+folderPath = os.path.join(location, 'Data Analyzer')
+if not os.path.exists(folderPath):
+    os.makedirs(folderPath)
+subfolderPath = os.path.join(folderPath, file)
+print(subfolderPath)
+if not os.path.exists(subfolderPath):
+    os.makedirs(subfolderPath)
+if os.path.exists(subfolderPath):
+    subprocess.Popen('explorer \"' + subfolderPath + '\"')
+    subprocess.Popen('ls', shell=True)
+
+# put files in their appropriate places
+shutil.copyfile('template.py', pythonFileName)
+shutil.copy2(pythonFileName, subfolderPath)
+try:
+    workbookLocation = os.path.abspath(workbookName)
+    shutil.move(workbookLocation, subfolderPath)
+except shutil.Error:
+    print()
+
+################################ SETTING UP WORKBOOK ##########################
 
 calculations = workbook.add_worksheet('Basic Calculations')
 calculations.set_column(0, 5, 20)
@@ -56,7 +103,8 @@ rFont.set_font_name('Courier New')
 bFont = workbook.add_format({'bold' : True})
 bFont.set_font_name('Courier New')
 
-############################### CALCULATIONS ########################################
+################### CALCULATIONS WORKSHEET ####################
+
 binaries = calcs.binDiff(binKeys, rFont, font)
 differences = calcs.differences(decSeeds, decKeys)
 secondDifferences = calcs.sDifferences(differences)
@@ -114,7 +162,8 @@ for i in range(len(xors)):
     calculations.write(row, 17, xorInstances[i], font)
     row += 1
 
-######################### SHIFTS AND ROTATES ##########################################
+######################### SHIFTS, ROTATES, MASKS ############################
+
 rshifts = rotatesShifts.RshiftAll(binKeys)
 lshifts = rotatesShifts.LshiftAll(binKeys)
 rotates = rotatesShifts.rotateAll(binKeys)
@@ -190,9 +239,15 @@ graphs.insert_chart(1, 1, seedGraph)
 graphs.insert_chart(1, 9, diffGraph)
 graphs.insert_chart(17, 1, sdiffGraph)
 graphs.insert_chart(17, 9, xorGraph)
-# close the workbook and open the file
+
+# close the workbook
 workbook.close()
+
+################################ OPEN FILES ##########################
+
 if platform.system() == 'Windows':
-    os.startfile(os.path.abspath(file))
+    os.startfile(os.path.abspath(pythonFileName))
+    os.startfile(workbookLocation)
 else:
-    os.system("open " + file.replace(" ", "\\ "))
+    os.system("open " + pythonFileName.replace(" ", "\\ "))
+    os.system("open " + workbookName.replace(" ", "\\ "))
