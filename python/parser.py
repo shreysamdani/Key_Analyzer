@@ -7,9 +7,10 @@ import rotatesShifts
 import platform
 import shutil 
 import subprocess
-################################ READ FORMATTED INPUT FILE ##########################
 
-filename = str(input("Drag and drop your file here: \t"))
+################################ READ FORMATTED INPUT FILE ##########################
+print("Drag and drop your file here: \t")
+filename = str(input())
 if os.name == 'nt':
     filename = os.path.abspath(filename[3:]).replace("'", "")
 xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
@@ -48,42 +49,47 @@ workbook = xlsxwriter.Workbook(workbookName)
 ################################ BUILDING NEW PYTHON FILE ##########################
 
 pythonFileName = file + ' Functions.py'
+shutil.copyfile('template.py', pythonFileName)
+
+################################ CREATE FOLDER STRUCTURE ########################## 
 
 # decide where to keep new directory
-print('This program saves program files in a directory. Please paste your current directory. Type \"def\" for a default directory on your desktop.\n')
-location = str(input())
+# print('This program saves program files in a directory. Please paste your current directory. Type \"def\" for a default directory on your desktop.\n')
+# location = str(input())
 
-# go to user's home path
-userhome = os.path.expanduser('~')
-useros = platform.system()
-if location == 'def':
-    if useros == 'Windows':
-        location = userhome + '\\Desktop'
-    else:
-        location = userhome + '/Desktop'
+# # go to user's home path
+# userhome = os.path.expanduser('~')
+# useros = platform.system()
+# if location == 'def':
+#     if useros == 'Windows':
+#         location = userhome + '\\Desktop\\'
+#     else:
+#         location = userhome + '/Desktop/'
 
 # build a folder structure: location --> Data Analyzer --> file folder --> files
-folderPath = os.path.join(location, 'Data Analyzer')
-if not os.path.exists(folderPath):
-    os.makedirs(folderPath)
-subfolderPath = os.path.join(folderPath, file)
-print(subfolderPath)
-if not os.path.exists(subfolderPath):
-    os.makedirs(subfolderPath)
-if os.path.exists(subfolderPath):
-    subprocess.Popen('explorer \"' + subfolderPath + '\"')
-    subprocess.Popen('ls', shell=True)
+# folderPath = os.path.join(location, 'Data Analyzer')
+# if not os.path.exists(folderPath):
+#     os.makedirs(folderPath)
+# subprocess.Popen('explorer \"' + folderPath + '\"')
+# subfolderPath = os.path.join(folderPath, file)
+# os.makedirs(subfolderPath)
+# if os.path.exists(subfolderPath):
+#     subprocess.Popen('explorer \"' + subfolderPath + '\"')
+#     subprocess.Popen('cd \"' + subfolderPath + '\"', shell = True)
 
-# put files in their appropriate places
-shutil.copyfile('template.py', pythonFileName)
-shutil.copy2(pythonFileName, subfolderPath)
-try:
-    workbookLocation = os.path.abspath(workbookName)
-    shutil.move(workbookLocation, subfolderPath)
-except shutil.Error:
-    print()
+# # put files in their appropriate places
+
+# shutil.copy2(pythonFileName, subfolderPath)
+# try:
+#     workbookLocation = os.path.abspath(workbookName)
+#     shutil.move(workbookLocation, subfolderPath)
+# except shutil.Error:
+#     print()
+# except FileNotFoundError:
+#     print()
 
 ################################ SETTING UP WORKBOOK ##########################
+
 
 calculations = workbook.add_worksheet('Basic Calculations')
 calculations.set_column(0, 5, 20)
@@ -240,14 +246,16 @@ graphs.insert_chart(1, 9, diffGraph)
 graphs.insert_chart(17, 1, sdiffGraph)
 graphs.insert_chart(17, 9, xorGraph)
 
-# close the workbook
-workbook.close()
+try:
+    # close the workbook
+    workbook.close()
 
-################################ OPEN FILES ##########################
-
-if platform.system() == 'Windows':
-    os.startfile(os.path.abspath(pythonFileName))
-    os.startfile(workbookLocation)
-else:
-    os.system("open " + pythonFileName.replace(" ", "\\ "))
-    os.system("open " + workbookName.replace(" ", "\\ "))
+################################ OPEN FILES ##########################  
+    if platform.system() == 'Windows':
+        os.startfile(os.path.abspath(pythonFileName))
+        os.startfile(os.path.abspath(workbookName))
+    else:
+        os.system("open " + pythonFileName.replace(" ", "\\ "))
+        os.system("open " + workbookName.replace(" ", "\\ "))
+except PermissionError:
+    print()

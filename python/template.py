@@ -1,12 +1,13 @@
 import pandas as pd 
 import xlsxwriter
+import os
 from colorama import init, Fore, Back, Style
 
 ############# TEMPLATE CODE ##########################
 ############# RUN THIS FILE IN TERMINAL ##########################
 
 
-xl = pd.read_excel(workbookName, 'Basic Calculations', encoding='utf-8')
+xl = pd.read_excel(os.path.basename(__file__)[:len(' Functions.py')] + 'Analysis.xlsx', 'Basic Calculations', encoding='utf-8')
 column = list(xl)
 
 hex_seeds = list(xl[column[0]][:])
@@ -43,4 +44,4 @@ for i in range(len(dec_seeds)):
 	g = next(k)
 	pr = cprint()
 	print(str(dec_seeds[i]) + "\t", str(g) + "\t", 
-		str(dec_keys[i]) + "\t", pr[0] + diffs(g) + pr[1])
+		str(dec_keys[i]) + "\t", pr[0] + getError(g) + pr[1])
