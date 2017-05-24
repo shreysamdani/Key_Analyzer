@@ -1,10 +1,12 @@
-
-
 import pandas as pd
 import xlsxwriter
 import sys
 import os
+import calcs
+import rotatesShifts
 import platform
+import shutil 
+import subprocess
 
 def rotateAll(binKeys):
     all = []
@@ -120,11 +122,16 @@ def bitNot(data, font, font2):
     nots.append([font2, data[-1]])
     return nots
 
-filename = str(input("Drag and drop your file here: \t")).replace("\ ", " ").strip()
+################################ READ FORMATTED INPUT FILE ##########################
+
+print("Drag and drop your file here: \t")
+filename = str(input()).replace("\ ", " ").strip()
 if os.name == 'nt':
     filename = os.path.abspath(filename[3:]).replace("\"", "")
 xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
 name_in = filename
+
+############################### CONVERT INPUT INTO COLUMNS ##########################
 
 column = list(xl)
 keys = xl[column[1]][1:]
@@ -147,10 +154,20 @@ for i in range(len(binSeeds)):
     binSeeds[i] = '0' * (4 * len(hexKeys[1]) - len(binSeeds[i])) + binSeeds[i]
     binKeys[i] = '0' * (4 * len(hexKeys[1]) - len(binKeys[i])) + binKeys[i]
 
+################################ BUILDING NEW EXCEL FILE ##########################
 
 # create a new excel file
-file = name_in[:name_in.find(".xls")] + ' Analysis.xls'
-workbook = xlsxwriter.Workbook(file)
+file = name_in[:name_in.find(".xls")]
+workbookName = file + ' Analysis.xlsx'
+workbook = xlsxwriter.Workbook(workbookName)
+
+################################ BUILDING NEW PYTHON FILE ##########################
+
+pythonFileName = file + ' Functions.py'
+shutil.copyfile('template.py', pythonFileName)
+
+
+################################ SETTING UP WORKBOOK ##########################
 
 calculations = workbook.add_worksheet('Basic Calculations')
 calculations.set_column(0, 5, 20)
@@ -228,7 +245,8 @@ for i in range(len(xors)):
     calculations.write(row, 17, xorInstances[i], font)
     row += 1
 
-######################### SHIFTS AND ROTATES ##########################################
+######################### SHIFTS, ROTATES, AND MASKS ##########################################
+
 rshifts = RshiftAll(binKeys)
 lshifts = LshiftAll(binKeys)
 rotates = rotateAll(binKeys)
@@ -304,9 +322,17 @@ graphs.insert_chart(1, 1, seedGraph)
 graphs.insert_chart(1, 9, diffGraph)
 graphs.insert_chart(17, 1, sdiffGraph)
 graphs.insert_chart(17, 9, xorGraph)
-# close the workbook and open the file
-workbook.close()
-if platform.system() == 'Windows':
-    os.startfile(os.path.abspath(file))
-else:
-    os.system("open " + file.replace(" ", "\\ "))
+
+try:
+    # close the workbook
+    workbook.close()
+
+################################ OPEN FILES ##########################  
+    if platform.system() == 'Windows':
+        os.startfile(os.path.abspath(pythonFileName))
+        os.startfile(os.path.abspath(workbookName))
+    else:
+        os.system("open " + pythonFileName.replace(" ", "\\ "))
+        os.system("open " + workbookName.replace(" ", "\\ "))
+except PermissionError:
+    print()
