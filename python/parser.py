@@ -134,6 +134,7 @@ calculations.write(row, 11, 'XOR_DEC', font)
 calculations.write(row, 13, 'APPEARANCES (DIFFERENCES)', font)
 calculations.write(row, 16, 'APPEARANCES (XOR)', font)
 calculations.write(row, 18, 'BIT_NOT', font)
+calculations.freeze_panes(1, 0)
 row += 1
 
 # write in the columns for calculations
@@ -186,6 +187,7 @@ shifts.write(row, 0, 'RIGHT_SHIFTS', bFont)
 shifts.write(row, length, 'LEFT_SHIFTS', bFont)
 shifts.write(row, 2 * length, 'ROTATES', bFont)
 shifts.write(row, 3 * length, 'MASKS', bFont)
+shifts.freeze_panes(1, 0)
 row += 1
 
 for i in range(length - 1):
