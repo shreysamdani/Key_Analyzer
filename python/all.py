@@ -134,10 +134,8 @@ name_in = filename
 ############################### CONVERT INPUT INTO COLUMNS ##########################
 
 column = list(xl)
-keys = xl[column[1]][1:]
-keys.dropna()
-seeds = xl[column[0]][1:]
-seeds.dropna()
+keys = xl[column[1]].dropna()[1:]
+seeds = xl[column[0]].dropna()[1:]
 
 # convert data to specific type
 hexSeeds = [str(i) for i in seeds]
