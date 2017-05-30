@@ -134,10 +134,8 @@ name_in = filename
 ############################### CONVERT INPUT INTO COLUMNS ##########################
 
 column = list(xl)
-keys = xl[column[1]][1:]
-keys.dropna()
-seeds = xl[column[0]][1:]
-seeds.dropna()
+keys = xl[column[1]].dropna()[1:]
+seeds = xl[column[0]].dropna()[1:]
 
 # convert data to specific type
 hexSeeds = [str(i) for i in seeds]
@@ -308,17 +306,17 @@ xorGraph = workbook.add_chart({'type' : 'scatter', 'subtype' : 'straight_with_ma
 xorGraph.set_title({'name' : 'XOR vs Seed'})
 
 
-seedGraph.add_series({'values' : '=Basic Calculations!$D$2:$D$' + str(len(binKeys) + 1),
-                      'categories': '=Basic Calculations!$C$2:$C$' + str(len(binKeys) + 1)})
+seedGraph.add_series({'values' : '=Basic Calculations!$D$2:$D$30' + str(len(binKeys) + 1),
+                      'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys) + 1)})
 
-diffGraph.add_series({'values' : '=Basic Calculations!$H$2:$H$' + str(len(binKeys) + 1),
-                      'categories': '=Basic Calculations!$C$2:$C$' + str(len(binKeys))})
+diffGraph.add_series({'values' : '=Basic Calculations!$H$2:$H$30' + str(len(binKeys) + 1),
+                      'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys))})
 
-sdiffGraph.add_series({'values' : '=Basic Calculations!$I$2:$I$' + str(len(binKeys) + 1),
-                       'categories': '=Basic Calculations!$C$2:$C$' + str(len(binKeys) - 1)})
+sdiffGraph.add_series({'values' : '=Basic Calculations!$I$2:$I$30' + str(len(binKeys) + 1),
+                       'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys) - 1)})
 
-xorGraph.add_series({'values' : '=Basic Calculations!$L$2:$L$' + str(len(binKeys) + 1),
-                     'categories': '=Basic Calculations!$C$2:$C$' + str(len(binKeys))})
+xorGraph.add_series({'values' : '=Basic Calculations!$L$2:$L$30' + str(len(binKeys) + 1),
+                     'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys))})
 
 graphs.insert_chart(1, 1, seedGraph)
 graphs.insert_chart(1, 9, diffGraph)

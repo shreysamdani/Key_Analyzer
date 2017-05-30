@@ -50,6 +50,6 @@ Run cmd as administrator and execute the following:</br>
 
 #### Running the code:</br>
 Navigate to the python directory. Run 
-<pre><code>python3 parse.py
+<pre><code>python3 all.py
 </code></pre></ul></br>
 Then drag and drop the file into terminal and click enter.

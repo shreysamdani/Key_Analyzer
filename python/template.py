@@ -8,7 +8,7 @@ from colorama import init, Fore, Back, Style
 
 
 xl = pd.read_excel(os.path.basename(__file__)[:-len('Functions.py')] + 'Analysis.xlsx', 'Basic Calculations', encoding='utf-8')
-column = list(xl)
+column = [i.dropna() for i in xl]
 
 hex_seeds = list(xl[column[0]][:])
 hex_keys = list(xl[column[1]][:])
@@ -32,8 +32,10 @@ def getError(g):
 # Prints to terminal
 
 init()
+fontcolor = "red"
+bgcolor = "reset"
 
-def cprint(foreground = "red", background = "black"):
+def cprint(foreground = fontcolor, background = reset):
     fground = foreground.upper()
     bground = background.upper()
     style = getattr(Fore, fground) + getattr(Back, bground)
