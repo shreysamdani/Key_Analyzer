@@ -28,6 +28,7 @@ The excel file will then open.
 <li>pandas 
 <li>xlsxwriter 
 <li>numpy
+<li>PyQt5
 </ul>
 
 ##### OSX:
@@ -37,6 +38,8 @@ Open terminal and run the following to install:</br>
 <pre><code>sudo pip install xlrd
 </code></pre></ul>
 <pre><code>sudo pip install numpy
+</code></pre></ul>
+<pre><code>sudo pip install PyQt5
 </code></pre></ul></br>
 
 ##### Windows:
@@ -46,10 +49,12 @@ Run cmd as administrator and execute the following:</br>
 <pre><code>pip install xlrd
 </code></pre></ul>
 <pre><code>pip install numpy
+</code></pre></ul>
+<pre><code>pip install PyQt5
 </code></pre></ul></br>
 
 #### Running the code:</br>
 Navigate to the python directory. Run 
-<pre><code>python3 all.py
+<pre><code>python3 Analyzer.py
 </code></pre></ul></br>
 Then drag and drop the file into terminal and click enter.
