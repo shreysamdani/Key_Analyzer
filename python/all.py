@@ -144,7 +144,7 @@ window.mainloop()
 print("Drag and drop your file here: \t")
 filename = str(input()).replace("\ ", " ").strip()
 if os.name == 'nt':
-    filename = os.path.abspath(filename[3:]).replace("\"", "")
+    filename = os.path.abspath(filename[3:]).replace("\"", "").replace("'", "")
 xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
 name_in = filename
 
@@ -229,7 +229,7 @@ def colWriter(sheet, column, name, lst, rich = False):
             if len(str(lst[i])) > maxlen:
                 maxlen = len(str(lst[i][1]))
             sheet.write_rich_string(i + 1, column, *lst[i])    
-    sheet.set_column(column, column, maxlen + 4)       
+    sheet.set_column(column, column, maxlen * 1.3)       
 
 
 

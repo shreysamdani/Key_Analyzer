@@ -8,13 +8,13 @@ from colorama import init, Fore, Back, Style
 
 
 xl = pd.read_excel(os.path.basename(__file__)[:-len('Functions.py')] + 'Analysis.xlsx', 'Basic Calculations', encoding='utf-8')
-column = list(xl)
+column = [i for i in xl]
 
-hex_seeds = list(xl[column[0]][:])
-hex_keys = list(xl[column[1]][:])
+hex_seeds = list(xl[column[0]].dropna()[:])
+hex_keys = list(xl[column[1]].dropna()[:])
 
-dec_seeds = list(xl[column[2]][:])
-dec_keys = list(xl[column[3]][:])
+dec_seeds = list(xl[column[2]].dropna()[:])
+dec_keys = list(xl[column[3]].dropna()[:])
 
 # Fill in this function accordingly to solve the problem
 def function(x):
@@ -32,8 +32,10 @@ def getError(g):
 # Prints to terminal
 
 init()
+fontcolor = "red"
+bgcolor = "reset"
 
-def cprint(foreground = "red", background = "black"):
+def cprint(foreground = fontcolor, background = bgcolor):
     fground = foreground.upper()
     bground = background.upper()
     style = getattr(Fore, fground) + getattr(Back, bground)
