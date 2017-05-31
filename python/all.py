@@ -5,8 +5,6 @@ import pandas as pd
 import xlsxwriter
 import sys
 import os
-import calcs
-import rotatesShifts
 import platform
 import shutil 
 import subprocess
