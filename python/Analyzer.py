@@ -72,6 +72,7 @@ class Example(QWidget):
             for url in event.mimeData().urls():
                 path = url.toLocalFile()
             if os.path.isfile(path):
+                print(path)
                 run(path)
                 self.close
                 sys.exit()
@@ -81,6 +82,7 @@ class Example(QWidget):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
         if fileName:
+            print(fileName)
             run(fileName)
             self.close
             sys.exit()

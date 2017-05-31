@@ -15,6 +15,7 @@ import subprocess
 
 def run(file):
 
+
     filename = file.replace("\ ", " ").strip()
 
     def rotateAll(binKeys):
@@ -138,9 +139,9 @@ def run(file):
         return nots   
 
     ################################ READ FORMATTED INPUT FILE ##########################
-
+    filename = file
     if os.name == 'nt':
-        filename = os.path.abspath(filename[3:]).replace("\"", "").replace("'", "")
+        filename = filename.replace("\"", "").replace("'", "")
     xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
     name_in = filename
 
