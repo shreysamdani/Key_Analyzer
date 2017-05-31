@@ -7,6 +7,7 @@ import rotatesShifts
 import platform
 import shutil 
 import subprocess
+import tkinter
 
 #################### ALL FUNCTIONS ############################################
 
@@ -129,6 +130,14 @@ def bitNot(data, font2, font):
         nots.append(formattedNums)
     nots.append([font2, data[-1]])
     return nots
+################################ TKINTER GUI ########################################
+window = tkinter.Tk()
+window.title("Seed/Key Analyzer")
+window.iconbitmap(r"snapon.ico")
+window.geometry("600x600")
+window.mainloop()
+
+
 
 ################################ READ FORMATTED INPUT FILE ##########################
 
