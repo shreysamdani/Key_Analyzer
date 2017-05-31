@@ -8,6 +8,8 @@ import platform
 import shutil 
 import subprocess
 
+#################### ALL FUNCTIONS ############################################
+
 def rotateAll(binKeys):
     all = []
     for i in range(1, len(binKeys[0])):
@@ -77,6 +79,12 @@ def xor(binKeys):
     xorDec = [int(i, 2) for i in xorBin]
     return xorBin, xorDec
 
+def skxor(decKeys, binKeys):
+    xorBin =[]
+    for i in range(len(binKeys)):
+        xorBin.append(''.join(str(ord(a) ^ ord(b)) for a, b in zip(binKeys[i], decKeys[i])))
+    return xorBin  
+
 def mostCommon(data):
     tracker = {}
     for i in data:
@@ -89,7 +97,7 @@ def mostCommon(data):
     nums = [i[1] for i in appearances]
     return values, nums
 
-def binDiff(data, font, font2):
+def binDiff(data, font2, font):
     result = []
     for i in range(len(data) - 1):
         formattedNums = []
@@ -102,7 +110,7 @@ def binDiff(data, font, font2):
     result.append([font2, data[-1]])
     return result
 
-def bitNot(data, font, font2):
+def bitNot(data, font2, font):
     nots = []
     for i in range(len(data) - 1):
         formattedNums = []
@@ -168,9 +176,9 @@ shutil.copyfile('template.py', pythonFileName)
 ################################ SETTING UP WORKBOOK ##########################
 
 calculations = workbook.add_worksheet('Basic Calculations')
-calculations.set_column(0, 5, 20)
-calculations.set_column(7, 8, 20)
-calculations.set_column(10, 10, 20)
+# calculations.set_column(0, 5, 20)
+# calculations.set_column(7, 8, 20)
+# calculations.set_column(10, 10, 20)
 
 shifts = workbook.add_worksheet('Rotates and Shifts')
 graphs = workbook.add_worksheet('Graphs')
@@ -193,56 +201,57 @@ xorBin, xorDec = xor(binKeys)
 diffs, diffInstances = mostCommon(differences)
 xors, xorInstances = mostCommon(xorDec)
 nots = bitNot(binKeys, rFont, font)
+skxors = skxor(binSeeds, binKeys)
+skxorsdec = [int(i, 2) for i in skxors]
 
 # write in the column titles for calculations
-row = 0
-calculations.write(row, 0, 'HEX_SEEDS', font)
-calculations.write(row, 1, 'HEX_KEYS', font)
-calculations.write(row, 2, 'DEC_SEEDS', font)
-calculations.write(row, 3, 'DEC_KEYS', font)
-calculations.write(row, 4, 'BIN_SEEDS', font)
-calculations.write(row, 5, 'BIN_KEYS', font)
-calculations.write(row, 7, '1st_DIFFERENCES', font)
-calculations.write(row, 8, '2nd_DIFFERENCES', font)
-calculations.write(row, 10, 'XOR_BIN', font)
-calculations.write(row, 11, 'XOR_DEC', font)
-calculations.write(row, 13, 'APPEARANCES (DIFFERENCES)', font)
-calculations.write(row, 16, 'APPEARANCES (XOR)', font)
-calculations.write(row, 18, 'BIT_NOT', font)
-calculations.freeze_panes(1, 0)
-row += 1
+
 
 # write in the columns for calculations
-for i in range(len(seeds)):
-    calculations.write(row, 0, hexSeeds[i], font)
-    calculations.write(row, 1, hexKeys[i], font)
-    calculations.write(row, 2, decSeeds[i], font)
-    calculations.write(row, 3, decKeys[i], font)
-    calculations.write(row, 4, binSeeds[i], font)
-    calculations.write_rich_string(row, 5, *binaries[i])
-    calculations.write_rich_string(row, 18, *nots[i])
+def colWriter(sheet, column, name, lst, rich = False):
+    maxlen = len(name)
+    sheet.write(0, column, name, font)
+    for i in range(len(lst)):
+        if not rich:
+            if len(str(lst[i])) > maxlen:
+                maxlen = len(str(lst[i]))
+            sheet.write(i + 1, column, lst[i] , font)
+        else:
+            if len(str(lst[i])) > maxlen:
+                maxlen = len(str(lst[i][1]))
+            sheet.write_rich_string(i + 1, column, *lst[i])    
+    sheet.set_column(column, column, maxlen + 4)       
 
-    if i < len(seeds) - 1:
-        calculations.write(row, 7, differences[i], font)
-        calculations.write(row, 10, xorBin[i], font)
-        calculations.write(row, 11, xorDec[i], font)
 
-    if i < len(seeds) - 2:
-        calculations.write(row, 8, secondDifferences[i], font)
 
-    row += 1
+# To add another column, add a tuple to the list in this form: (column index, column name, column list)
 
-row = 1
-for i in range(len(diffs)):
-    calculations.write(row, 13, diffs[i], font)
-    calculations.write(row, 14, diffInstances[i], font)
-    row += 1
+cols = [(0, 'HEX_SEEDS', hexSeeds),
+        (1, 'HEX_KEYS',hexKeys),
+        (2, 'DEC_SEEDS', decSeeds),
+        (3, 'DEC_KEYS', decKeys),
+        (4, 'BIN_SEEDS', binSeeds),
+        (7, '1st_DIFFERENCES', differences),
+        (8, '2nd_DIFFERENCES', secondDifferences),
+        (10, 'XOR_BIN', xorBin),
+        (11, 'XOR_DEC',xorDec),
+        (13, 'APPEARANCES (DIFFERENCES)', diffs),
+        (14, "",diffInstances),
+        (16, 'APPEARANCES (XOR)', xors),
+        (17, "", xorInstances),
+        (20 ,'SEED/KEY XOR (BIN)', skxors), 
+        (21 ,'SEED/KEY XOR (DEC)', skxorsdec)]
 
-row = 1
-for i in range(len(xors)):
-    calculations.write(row, 16, xors[i], font)
-    calculations.write(row, 17, xorInstances[i], font)
-    row += 1
+coloredCols = [(5, 'BIN_KEYS', binaries),
+                (19, 'BIT_NOT', nots)]        
+
+for i in cols:
+    colWriter(calculations, i[0], i[1], i[2])
+
+for i in coloredCols:
+    colWriter(calculations, i[0], i[1], i[2], True)
+
+calculations.freeze_panes(1, 0)
 
 ######################### SHIFTS, ROTATES, AND MASKS ##########################################
 
@@ -257,6 +266,8 @@ shifts.set_column(0, length, 9)
 shifts.set_column(length, length * 2, 11)
 shifts.set_column(length * 2, length * 3 - 1, 11)
 row = 0
+
+cols = []
 
 shifts.write(row, 0, 'RIGHT_SHIFTS', bFont)
 shifts.write(row, length, 'LEFT_SHIFTS', bFont)
@@ -306,17 +317,17 @@ xorGraph = workbook.add_chart({'type' : 'scatter', 'subtype' : 'straight_with_ma
 xorGraph.set_title({'name' : 'XOR vs Seed'})
 
 
-seedGraph.add_series({'values' : '=Basic Calculations!$D$2:$D$30' + str(len(binKeys) + 1),
-                      'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys) + 1)})
+seedGraph.add_series({'values' : '=Basic Calculations!$D$2:$D$30',
+                      'categories': '=Basic Calculations!$C$2:$C$30'})
 
-diffGraph.add_series({'values' : '=Basic Calculations!$H$2:$H$30' + str(len(binKeys) + 1),
-                      'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys))})
+diffGraph.add_series({'values' : '=Basic Calculations!$H$2:$H$30',
+                      'categories': '=Basic Calculations!$C$2:$C$30'})
 
-sdiffGraph.add_series({'values' : '=Basic Calculations!$I$2:$I$30' + str(len(binKeys) + 1),
-                       'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys) - 1)})
+sdiffGraph.add_series({'values' : '=Basic Calculations!$I$2:$I$30',
+                       'categories': '=Basic Calculations!$C$2:$C$30'})
 
-xorGraph.add_series({'values' : '=Basic Calculations!$L$2:$L$30' + str(len(binKeys) + 1),
-                     'categories': '=Basic Calculations!$C$2:$C$30' + str(len(binKeys))})
+xorGraph.add_series({'values' : '=Basic Calculations!$L$2:$L$30' ,
+                     'categories': '=Basic Calculations!$C$2:$C$30'})
 
 graphs.insert_chart(1, 1, seedGraph)
 graphs.insert_chart(1, 9, diffGraph)
