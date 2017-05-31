@@ -14,8 +14,9 @@ import subprocess
     #################### ALL FUNCTIONS ############################################
 
 def run(file):
+    
 
-    filename = file.replace("\ ", " ").strip()
+    # filename = file.replace("\ ", " ").strip()
 
     def rotateAll(binKeys):
         all = []
@@ -139,8 +140,9 @@ def run(file):
 
     ################################ READ FORMATTED INPUT FILE ##########################
 
+    filename = file
     if os.name == 'nt':
-        filename = os.path.abspath(filename[3:]).replace("\"", "").replace("'", "")
+        filename = filename.replace("\"", "").replace("'", "")
     xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
     name_in = filename
 
@@ -162,8 +164,8 @@ def run(file):
 
     # make sure the binary strings are the correct length
     for i in range(len(binSeeds)):
-        binSeeds[i] = '0' * (4 * len(hexKeys[1]) - len(binSeeds[i])) + binSeeds[i]
-        binKeys[i] = '0' * (4 * len(hexKeys[1]) - len(binKeys[i])) + binKeys[i]
+        binSeeds[i] = '0' * (4 * len(hexKeys[0]) - len(binSeeds[i])) + binSeeds[i]
+        binKeys[i] = '0' * (4 * len(hexKeys[0]) - len(binKeys[i])) + binKeys[i]
 
     ################################ BUILDING NEW EXCEL FILE ##########################
 
