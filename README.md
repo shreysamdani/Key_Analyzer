@@ -9,7 +9,13 @@ Given hex seed/key pairs, this tool conducts basic analysis on the data, includi
 <li>Binary differences
 <li>Graphs and Charts
 <li>Binary Rotations and Shifts
-<li>Common Appearances</ul></br>
+<li>Common Appearances
+<li>Seed/Key XOR
+<li>Mask Patterns
+
+
+
+</ul></br>
 
 ## Formatting: </br>
 The input excel file should have a sheet named Seed_Keys_Samples. The first column of this sheet should be the hex seeds and the second column should be the hex keys. Row 2 of this sheet must have 'SEED' and 'KEY' in columns A and B respectively. The values must follow immediately after. If the file is not reading in, change the format of the cells to 'text' rather than general.
