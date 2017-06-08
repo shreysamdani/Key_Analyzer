@@ -47,6 +47,9 @@ Open terminal and run the following to install:</br>
 </code></pre></ul>
 <pre><code>sudo pip install PyQt5
 </code></pre></ul></br>
+To install all at once, run
+<pre><code>sudo pip install PyQt5 pandas xlrd numpy
+</code></pre>
 
 ##### Windows:
 Run cmd as administrator and execute the following:</br>
@@ -58,6 +61,9 @@ Run cmd as administrator and execute the following:</br>
 </code></pre></ul>
 <pre><code>pip install PyQt5
 </code></pre></ul></br>
+To install all at once, run
+<pre><code>pip install PyQt5 pandas xlrd numpy
+</code></pre>
 
 #### Running the code:</br>
 Navigate to the python directory. Run 
