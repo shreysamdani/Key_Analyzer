@@ -12,7 +12,7 @@ import subprocess
     #################### ALL FUNCTIONS ############################################
 
 def run(file):
-    
+
     filename = file.replace("\ ", " ").strip()
 
     def rotateAll(binKeys):
@@ -186,6 +186,7 @@ def run(file):
 
     shifts = workbook.add_worksheet('Rotates and Shifts')
     graphs = workbook.add_worksheet('Graphs')
+    binDigits = workbook.add_worksheet('Binary Values')
 
     font = workbook.add_format()
     font.set_font_name('Courier New')
@@ -338,11 +339,20 @@ def run(file):
     graphs.insert_chart(17, 1, sdiffGraph)
     graphs.insert_chart(17, 9, xorGraph)
 
+
+    ################################ BINARY VALUES ################################
+
+
+    
+
+
+
+    ################################ CLOSE WB AND OPEN FILES ################################
+
     try:
         # close the workbook
         workbook.close()
 
-    ################################ OPEN FILES ##########################  
         if platform.system() == 'Windows':
             os.startfile(os.path.abspath(pythonFileName))
             os.startfile(os.path.abspath(workbookName))
