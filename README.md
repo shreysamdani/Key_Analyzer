@@ -9,16 +9,25 @@ Given hex seed/key pairs, this tool conducts basic analysis on the data, includi
 <li>Binary differences
 <li>Graphs and Charts
 <li>Binary Rotations and Shifts
-<li>Common Appearances</ul></br>
+<li>Common Appearances
+<li>Seed/Key XOR
+<li>Mask Patterns
+
+
+
+</ul></br>
 
 ## Formatting: </br>
-The input excel file should have a sheet named Seed_Keys_Samples. The first column of this sheet should be the hex seeds and the second column should be the hex keys.
+The input excel file should have a sheet named Seed_Keys_Samples. The first column of this sheet should be the hex seeds and the second column should be the hex keys. Row 2 of this sheet must have 'SEED' and 'KEY' in columns A and B respectively. The values must follow immediately after. If the file is not reading in, change the format of the cells to 'text' rather than general.
 
 ## Usage:</br>
+Python 3.5 must be installed.
+
 
 ### Simple (Executable):</br>
-Download or clone the git repository. To run this program, open the platform specific folder and run the file named all or all.exe. Drag and drop the excel file into the terminal and click enter.</br>
-The excel file will then open.
+<!-- Download or clone the git repository. To run this program, open the platform specific folder and run the file named Analyzer or Analyzer.exe. Drag and drop the excel file into the terminal and click enter.</br>
+The excel file will then open. -->
+Navigate to the python folder and run the Modules.bat file as administrator (one time only). This file will install the dependencies needed for the analyzer tool. Then run the Analyzer.bat file to open the Analyzer tool. Run this file every time you need to use the tool.
 
 ### Advanced (Running python):</br>
 
@@ -28,6 +37,7 @@ The excel file will then open.
 <li>pandas 
 <li>xlsxwriter 
 <li>numpy
+<li>PyQt5
 </ul>
 
 ##### OSX:
@@ -37,7 +47,12 @@ Open terminal and run the following to install:</br>
 <pre><code>sudo pip install xlrd
 </code></pre></ul>
 <pre><code>sudo pip install numpy
+</code></pre></ul>
+<pre><code>sudo pip install PyQt5
 </code></pre></ul></br>
+To install all at once, run
+<pre><code>sudo pip install PyQt5 pandas xlrd numpy
+</code></pre>
 
 ##### Windows:
 Run cmd as administrator and execute the following:</br>
@@ -46,10 +61,15 @@ Run cmd as administrator and execute the following:</br>
 <pre><code>pip install xlrd
 </code></pre></ul>
 <pre><code>pip install numpy
+</code></pre></ul>
+<pre><code>pip install PyQt5
 </code></pre></ul></br>
+To install all at once, run
+<pre><code>pip install PyQt5 pandas xlrd numpy
+</code></pre>
 
 #### Running the code:</br>
 Navigate to the python directory. Run 
-<pre><code>python3 all.py
+<pre><code>python3 Analyzer.py
 </code></pre></ul></br>
 Then drag and drop the file into terminal and click enter.

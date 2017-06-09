@@ -1,0 +1,1 @@
+pip install PyQt5 pandas xlrd numpy
