@@ -51,9 +51,12 @@ def cprint(foreground = fontcolor, background = bgcolor):
     style = getattr(Fore, fground) + getattr(Back, bground)
     return (style, Style.RESET_ALL)
 
+pr = cprint()
+print("SEED" + "\t", "PRED" + "\t", 
+			"ACTUAL" + "\t", pr[0] + "ERROR" + pr[1])    
+
 k = (str(i) for i in map(function, dec_seeds))
 for i in range(len(dec_seeds)):
 	g = next(k)
-	pr = cprint()
 	print(str(dec_seeds[i]) + "\t", str(g) + "\t", 
 		str(dec_keys[i]) + "\t", pr[0] + getError(g) + pr[1])
