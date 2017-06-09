@@ -117,18 +117,6 @@ def run(file):
         result.append([font2, data[-1]])
         return result
 
-    # def zeroesOrOnes(data, font2, font):
-    #     result = []
-    #     for i in range(len(data) - 1):
-    #         formattedNums = []
-    #         for j in range(len(data[i])):
-    #             if int(data[i][j], 2) == 1:
-    #                 formattedNums.extend([font, data[i][j]])
-    #             else:
-    #                 formattedNums.extend([font2, data[i][j]])
-    #         result.append(formattedNums)
-    #     result.append([font2, data[-1]])
-    #     return result
 
     def bitNot(data, font2, font):
         nots = []
@@ -199,9 +187,6 @@ def run(file):
     ################################################################################################ SETTING UP WORKBOOK ######################################
 
     calculations = workbook.add_worksheet('Basic Calculations')
-    # calculations.set_column(0, 5, 20)
-    # calculations.set_column(7, 8, 20)
-    # calculations.set_column(10, 10, 20)
 
     shifts = workbook.add_worksheet('Rotates and Shifts')
     graphs = workbook.add_worksheet('Graphs')
@@ -216,6 +201,11 @@ def run(file):
 
     bFont = workbook.add_format({'bold' : True})
     bFont.set_font_name('Courier New')
+
+    highlight = workbook.add_format()
+    highlight.set_font_name('Courier New')
+    highlight.set_pattern(1)
+    highlight.set_bg_color("#CDF9F6")
 
     ################################################################################################ CALCULATIONS ##############################################
     binaries = binDiff(binKeys, rFont, font)
@@ -361,34 +351,23 @@ def run(file):
 
     ################################################################################################ BINARY VALUES ############################################
 
-    def colWriter(sheet, column, name, lst, rich = False):
+    def colWriter(sheet, column, name, lst, rich = False, hlight = False):
         maxlen = len(name)
         sheet.write(0, column, name, font)
         for i in range(len(lst)):
             if not rich:
                 if len(str(lst[i])) > maxlen:
                     maxlen = len(str(lst[i]))
-                sheet.write(i + 1, column, lst[i] , font)
+                if hlight:
+                    sheet.write(i + 1, column, lst[i] , highlight)
+                else:
+                    sheet.write(i + 1, column, lst[i] , font)
             else:
-                if len(str(lst[i])) > maxlen:
+                if len(str(lst[i][1])) > maxlen:
                     maxlen = len(str(lst[i][1]))
                 sheet.write_rich_string(i + 1, column, *lst[i])
         sheet.set_column(column, column, maxlen * 1.3)
 
-    # def colorNibble(data, font2, font):
-    #     result = []
-    #     for i in range(len(data) - 1):
-    #         formattedNums = []
-    #         k = 0
-    #         for j in range(len(data[i])):
-    #             if j%4 == 0 and j < len(data[i]) - 3:
-    #                 if k % 2 == 0:
-    #                     formattedNums.extend([font, data[i][j:j + 4]])
-    #                 else:
-    #                     formattedNums.extend([font2, data[i][j:j + 4]])
-    #         result.append(formattedNums)
-    #     result.append([font2, data[-1]])
-    #     return result
 
     allNibbles, allDigits = [], []
     j = 0
@@ -396,38 +375,38 @@ def run(file):
         singleNibble, singleDigit = [], []
         for i in range(len(binKeys)):
             digit = str(binKeys[i])[j]
-            # if digit == '1':
-                # singleDigit.append([font, digit])
-            # else:
-                # singleDigit.append([rFont, digit])
-            singleDigit.append(digit)
+            if digit == '0':
+                singleDigit.append([font, digit])
+            else:
+                singleDigit.append([highlight, digit])
             if j % 4 == 0 and j < len(binSeeds[0]) - 3:
                 nibble = str(binSeeds[i])[j:j + 4]
-                # if j % 8 == 0:
-                    # singleNibble.extend([font, nibble])
-                # else:
-                    # singleNibble.extend([rFont, nibble])
                 singleNibble.append(nibble)
         allDigits.append(singleDigit)
         if j % 4 == 0:
             allNibbles.append(singleNibble)
         j += 1
 
-    cols = [(0, "SEED_DEC", decSeeds),
+    colnames = [(0, "SEED_DEC", decSeeds),
             (1, "KEY_DEC", decKeys)]
 
-    # for i in cols:
-    #     colWriter(binDigits, i[0], i[1], i[2])
 
-    index = len(cols) + 1
-    cols += [(i + index, "Nibble " + str(i), allNibbles[i]) for i in range(len(allNibbles))]
+    index = len(colnames) + 1
+    colnames += [(i + index, "Nibble " + str(i), allNibbles[i]) for i in range(len(allNibbles))]
 
-    index = len(cols) + 2
-    cols += [(i + index, " "*(3 - len(str(i))) + str(i), allDigits[i]) for i in range(len(allDigits))]
+    index = len(colnames) + 2
+    cols = [(i + index, " " * (3 - len(str(i))) + str(i), allDigits[i]) for i in range(len(allDigits))]
 
-    for i in cols:
-        print(i[2])
+    for i in colnames:
         colWriter(binDigits, i[0], i[1], i[2])
+
+
+    binDigits.set_column(index, index + len(cols), 3.9)
+    for i in range(len(cols)):
+        binDigits.write(0, i + index, i, font)
+
+        for bit in range(len(cols[i][2])):
+            binDigits.write(bit + 1, i + index, int(cols[i][2][bit][1]) ,cols[i][2][bit][0] )
 
     binDigits.freeze_panes(1, 0)
 
