@@ -202,11 +202,6 @@ def run(file):
     bFont = workbook.add_format({'bold' : True})
     bFont.set_font_name('Courier New')
 
-    highlight = workbook.add_format()
-    highlight.set_font_name('Courier New')
-    highlight.set_pattern(1)
-    highlight.set_bg_color("#CDF9F6")
-
     ################################################################################################ CALCULATIONS ##############################################
     binaries = binDiff(binKeys, rFont, font)
     differences = differences(decSeeds, decKeys)
@@ -351,23 +346,16 @@ def run(file):
 
     ################################################################################################ BINARY VALUES ############################################
 
-    def colWriter(sheet, column, name, lst, rich = False, hlight = False):
-        maxlen = len(name)
-        sheet.write(0, column, name, font)
-        for i in range(len(lst)):
-            if not rich:
-                if len(str(lst[i])) > maxlen:
-                    maxlen = len(str(lst[i]))
-                if hlight:
-                    sheet.write(i + 1, column, lst[i] , highlight)
-                else:
-                    sheet.write(i + 1, column, lst[i] , font)
-            else:
-                if len(str(lst[i][1])) > maxlen:
-                    maxlen = len(str(lst[i][1]))
-                sheet.write_rich_string(i + 1, column, *lst[i])
-        sheet.set_column(column, column, maxlen * 1.3)
 
+    highlight = workbook.add_format()
+    highlight.set_font_name('Courier New')
+    highlight.set_pattern(1)
+    highlight.set_bg_color("#FFFFFF")
+
+    highlight0 = workbook.add_format()
+    highlight0.set_font_name('Courier New')
+    highlight0.set_pattern(1)
+    highlight0.set_bg_color('#A0A0A0')
 
     allNibbles, allDigits = [], []
     j = 0
@@ -376,7 +364,7 @@ def run(file):
         for i in range(len(binKeys)):
             digit = str(binKeys[i])[j]
             if digit == '0':
-                singleDigit.append([font, digit])
+                singleDigit.append([highlight0, digit])
             else:
                 singleDigit.append([highlight, digit])
             if j % 4 == 0 and j < len(binSeeds[0]) - 3:
