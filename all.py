@@ -13,13 +13,7 @@ import subprocess
 
 def run(file):
     
-
-<<<<<<< HEAD
-    # filename = file.replace("\ ", " ").strip()
-=======
-
     filename = file.replace("\ ", " ").strip()
->>>>>>> 79e1602971b2d02ffff5a8bb31df3306e022311d
 
     def rotateAll(binKeys):
         all = []
@@ -142,10 +136,7 @@ def run(file):
         return nots   
 
     ################################ READ FORMATTED INPUT FILE ##########################
-<<<<<<< HEAD
 
-=======
->>>>>>> 79e1602971b2d02ffff5a8bb31df3306e022311d
     filename = file
     if os.name == 'nt':
         filename = filename.replace("\"", "").replace("'", "")
