@@ -9,7 +9,7 @@ import platform
 import shutil 
 import subprocess
 
-    #################### ALL FUNCTIONS ############################################
+    ################################################################################################ ALL FUNCTIONS ########################################
 
 def run(file):
 
@@ -88,7 +88,7 @@ def run(file):
         xorBin =[]
         for i in range(len(binKeys)):
             xorBin.append(''.join(str(ord(a) ^ ord(b)) for a, b in zip(binKeys[i], decKeys[i])))
-        return xorBin  
+        return xorBin
 
     def mostCommon(data):
         tracker = {}
@@ -107,13 +107,28 @@ def run(file):
         for i in range(len(data) - 1):
             formattedNums = []
             for j in range(len(data[i])):
+                # integers are different
                 if int(data[i][j], 2) ^ int(data[i + 1][j], 2):
                     formattedNums.extend([font, data[i][j]])
+                # integers are the same
                 else:
                     formattedNums.extend([font2, data[i][j]])
             result.append(formattedNums)
         result.append([font2, data[-1]])
         return result
+
+    # def zeroesOrOnes(data, font2, font):
+    #     result = []
+    #     for i in range(len(data) - 1):
+    #         formattedNums = []
+    #         for j in range(len(data[i])):
+    #             if int(data[i][j], 2) == 1:
+    #                 formattedNums.extend([font, data[i][j]])
+    #             else:
+    #                 formattedNums.extend([font2, data[i][j]])
+    #         result.append(formattedNums)
+    #     result.append([font2, data[-1]])
+    #     return result
 
     def bitNot(data, font2, font):
         nots = []
@@ -122,20 +137,24 @@ def run(file):
             string = ""
             for j in range(len(data[i])):
                 if data[i][j] == '1':
+                    # integer is a 1 and different from the next one
                     if int(data[i][j], 2) ^ int(data[i + 1][j], 2):
                         formattedNums.extend([font, '0'])
+                    # integer is a 1 and same as the next one
                     else:
                         formattedNums.extend([font2, '0'])
                 else:
+                    # integer is a 0 and different from the next one
                     if int(data[i][j], 2) ^ int(data[i + 1][j], 2):
                         formattedNums.extend([font, '1'])
+                    # integer is a 0 and same as the next one
                     else:
                         formattedNums.extend([font2, '1'])
             nots.append(formattedNums)
         nots.append([font2, data[-1]])
-        return nots   
+        return nots
 
-    ################################ READ FORMATTED INPUT FILE ##########################
+    ################################################################################################ READ FORMATTED INPUT FILE ###############################
 
     filename = file
     if os.name == 'nt':
@@ -143,7 +162,7 @@ def run(file):
     xl = pd.read_excel(filename, 'Seed_Keys_Samples', encoding='utf-8')
     name_in = filename
 
-    ############################### CONVERT INPUT INTO COLUMNS ##########################
+    ################################################################################################ CONVERT INPUT INTO COLUMNS ##############################
 
     column = list(xl)
     keys = xl[column[1]].dropna()[1:]
@@ -164,20 +183,20 @@ def run(file):
         binSeeds[i] = '0' * (4 * len(hexKeys[0]) - len(binSeeds[i])) + binSeeds[i]
         binKeys[i] = '0' * (4 * len(hexKeys[0]) - len(binKeys[i])) + binKeys[i]
 
-    ################################ BUILDING NEW EXCEL FILE ##########################
+    ################################################################################################ BUILDING NEW EXCEL FILE ##################################
 
     # create a new excel file
     file = name_in[:name_in.find(".xls")]
     workbookName = file + ' Analysis.xlsx'
     workbook = xlsxwriter.Workbook(workbookName)
 
-    ################################ BUILDING NEW PYTHON FILE ##########################
+    ################################################################################################ BUILDING NEW PYTHON FILE #################################
 
     pythonFileName = file + ' Functions.py'
     shutil.copyfile('template.py', pythonFileName)
 
 
-    ################################ SETTING UP WORKBOOK ##########################
+    ################################################################################################ SETTING UP WORKBOOK ######################################
 
     calculations = workbook.add_worksheet('Basic Calculations')
     # calculations.set_column(0, 5, 20)
@@ -198,7 +217,7 @@ def run(file):
     bFont = workbook.add_format({'bold' : True})
     bFont.set_font_name('Courier New')
 
-    ############################### CALCULATIONS ########################################
+    ################################################################################################ CALCULATIONS ##############################################
     binaries = binDiff(binKeys, rFont, font)
     differences = differences(decSeeds, decKeys)
     secondDifferences = sDifferences(differences)
@@ -224,8 +243,8 @@ def run(file):
             else:
                 if len(str(lst[i])) > maxlen:
                     maxlen = len(str(lst[i][1]))
-                sheet.write_rich_string(i + 1, column, *lst[i])    
-        sheet.set_column(column, column, maxlen * 1.3)       
+                sheet.write_rich_string(i + 1, column, *lst[i])
+        sheet.set_column(column, column, maxlen * 1.3)
 
 
 
@@ -244,11 +263,11 @@ def run(file):
             (14, "",diffInstances),
             (16, 'APPEARANCES (XOR)', xors),
             (17, "", xorInstances),
-            (20 ,'SEED/KEY XOR (BIN)', skxors), 
+            (20 ,'SEED/KEY XOR (BIN)', skxors),
             (21 ,'SEED/KEY XOR (DEC)', skxorsdec)]
 
     coloredCols = [(5, 'BIN_KEYS', binaries),
-                    (19, 'BIT_NOT', nots)]        
+                    (19, 'BIT_NOT', nots)]
 
     for i in cols:
         colWriter(calculations, i[0], i[1], i[2])
@@ -258,7 +277,7 @@ def run(file):
 
     calculations.freeze_panes(1, 0)
 
-    ######################### SHIFTS, ROTATES, AND MASKS ##########################################
+    ################################################################################################ SHIFTS, ROTATES, AND MASKS ####################################
 
     rshifts = RshiftAll(binKeys)
     lshifts = LshiftAll(binKeys)
@@ -307,7 +326,7 @@ def run(file):
             row += 1
         row = 2
 
-    ################################### GRAPHS ##########################################
+    ################################################################################################ GRAPHS ###################################################
 
     seedGraph = workbook.add_chart({'type' : 'line', 'subtype' : 'straight_with_markers'})
     seedGraph.set_title({'name' : 'Key vs Seed'})
@@ -340,14 +359,80 @@ def run(file):
     graphs.insert_chart(17, 9, xorGraph)
 
 
-    ################################ BINARY VALUES ################################
+    ################################################################################################ BINARY VALUES ############################################
+
+    def colWriter(sheet, column, name, lst, rich = False):
+        maxlen = len(name)
+        sheet.write(0, column, name, font)
+        for i in range(len(lst)):
+            if not rich:
+                if len(str(lst[i])) > maxlen:
+                    maxlen = len(str(lst[i]))
+                sheet.write(i + 1, column, lst[i] , font)
+            else:
+                if len(str(lst[i])) > maxlen:
+                    maxlen = len(str(lst[i][1]))
+                sheet.write_rich_string(i + 1, column, *lst[i])
+        sheet.set_column(column, column, maxlen * 1.3)
+
+    # def colorNibble(data, font2, font):
+    #     result = []
+    #     for i in range(len(data) - 1):
+    #         formattedNums = []
+    #         k = 0
+    #         for j in range(len(data[i])):
+    #             if j%4 == 0 and j < len(data[i]) - 3:
+    #                 if k % 2 == 0:
+    #                     formattedNums.extend([font, data[i][j:j + 4]])
+    #                 else:
+    #                     formattedNums.extend([font2, data[i][j:j + 4]])
+    #         result.append(formattedNums)
+    #     result.append([font2, data[-1]])
+    #     return result
+
+    allNibbles, allDigits = [], []
+    j = 0
+    while j < len(binKeys[0]):
+        singleNibble, singleDigit = [], []
+        for i in range(len(binKeys)):
+            digit = str(binKeys[i])[j]
+            # if digit == '1':
+                # singleDigit.append([font, digit])
+            # else:
+                # singleDigit.append([rFont, digit])
+            singleDigit.append(digit)
+            if j % 4 == 0 and j < len(binSeeds[0]) - 3:
+                nibble = str(binSeeds[i])[j:j + 4]
+                # if j % 8 == 0:
+                    # singleNibble.extend([font, nibble])
+                # else:
+                    # singleNibble.extend([rFont, nibble])
+                singleNibble.append(nibble)
+        allDigits.append(singleDigit)
+        if j % 4 == 0:
+            allNibbles.append(singleNibble)
+        j += 1
+
+    cols = [(0, "SEED_DEC", decSeeds),
+            (1, "KEY_DEC", decKeys)]
+
+    # for i in cols:
+    #     colWriter(binDigits, i[0], i[1], i[2])
+
+    index = len(cols) + 1
+    cols += [(i + index, "Nibble " + str(i), allNibbles[i]) for i in range(len(allNibbles))]
+
+    index = len(cols) + 2
+    cols += [(i + index, " "*(3 - len(str(i))) + str(i), allDigits[i]) for i in range(len(allDigits))]
+
+    for i in cols:
+        print(i[2])
+        colWriter(binDigits, i[0], i[1], i[2])
+
+    binDigits.freeze_panes(1, 0)
 
 
-    
-
-
-
-    ################################ CLOSE WB AND OPEN FILES ################################
+    ################################################################################################ CLOSE WB AND OPEN FILES ##################################
 
     try:
         # close the workbook
