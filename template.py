@@ -24,8 +24,6 @@ bits = len(hex_seeds[0]) * 4
 bin_seeds = [(bits - len(i)) * "0" + str(i) for i in bin_seeds]
 bin_keys = [(bits - len(i)) * "0" + str(i) for i in bin_keys]
 
-print(bin_keys)
-
 # Fill in this function accordingly to solve the problem
 def function(x):
 	# Your Code Here
